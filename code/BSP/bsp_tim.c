@@ -1,4 +1,5 @@
 #include "bsp_tim.h"
+#include <stdio.h>
 
 void PWM_Init(void)
 {
@@ -11,6 +12,10 @@ void PWM_Init(void)
 void PWM_GPIO_Init(void)
 {
     GPIO_InitTypeDef    GPIO_InitStruct;
+
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA,ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC,ENABLE);
 
     GPIO_InitStruct.GPIO_Mode = GPIO_Mode_AF_PP;
     GPIO_InitStruct.GPIO_Speed = GPIO_Speed_50MHz;
@@ -29,15 +34,18 @@ void TIMBase_Init(void)
 {
     TIM_TimeBaseInitTypeDef TIMBase_InitStruct;
 
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM8,ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3,ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM5,ENABLE);
+    RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4,ENABLE);
+
     TIMBase_InitStruct.TIM_ClockDivision = TIM_CKD_DIV1;
     TIMBase_InitStruct.TIM_CounterMode = TIM_CounterMode_Up;
     TIMBase_InitStruct.TIM_Period = 20000 - 1;
     TIMBase_InitStruct.TIM_Prescaler = 72 -1 ;
     TIMBase_InitStruct.TIM_RepetitionCounter = 0;
 
-    uint8_t temp = 0;
-
-    for(temp=0;temp<4;temp++)
+    for(uint8_t temp=0;temp<4;temp++)
         TIM_TimeBaseInit(Target_TIM[temp],&TIMBase_InitStruct);
 }
 
@@ -79,42 +87,14 @@ void TIM_Enable(void)
 
 void PWM_Out(uint8_t Channel,uint16_t CCR)
 {
-    uint8_t OC = Channel%4; //计算得到OC通道
-    switch(OC)
-    {
-        case 0:
-            Target_TIM[Channel/4]->CCR1 = CCR;
-            break;
-        case 1:
-            Target_TIM[Channel/4]->CCR2 = CCR;
-            break;
-        case 2:
-            Target_TIM[Channel/4]->CCR3 = CCR;
-            break;
-        case 3:
-            Target_TIM[Channel/4]->CCR4 = CCR;
-            break;
-    }
+    if(Channel<16)
+        *Target_CCR[Channel] = CCR;
 }
 
-uint16_t PWM_Read(uint8_t Channel)
+uint16_t*Read_PWM_Out(uint8_t Channel)
 {
-    uint8_t OC = Channel%4; //计算得到OC通道
-    uint16_t CCR = 0xffff;
-    switch(OC)
-    {
-        case 0:
-            CCR = Target_TIM[Channel/4]->CCR1;
-            break;
-        case 1:
-            CCR = Target_TIM[Channel/4]->CCR2;
-            break;
-        case 2:
-            CCR = Target_TIM[Channel/4]->CCR2;
-            break;
-        case 3:
-            CCR = Target_TIM[Channel/4]->CCR2;
-            break;
-    }
-    return CCR;
+    if(Channel<16)
+        return (uint16_t*)Target_CCR[Channel];
+    return NULL;
 }
+

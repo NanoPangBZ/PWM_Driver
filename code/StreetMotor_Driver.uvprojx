@@ -47,13 +47,13 @@
             <NotGenerated>0</NotGenerated>
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
-          <OutputDirectory>.\Objects\</OutputDirectory>
+          <OutputDirectory>.\OUTPUT\</OutputDirectory>
           <OutputName>StreetMotor_Driver</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
-          <DebugInformation>0</DebugInformation>
-          <BrowseInformation>1</BrowseInformation>
+          <DebugInformation>1</DebugInformation>
+          <BrowseInformation>0</BrowseInformation>
           <ListingPath>.\Listings\</ListingPath>
           <HexFormatSelection>1</HexFormatSelection>
           <Merge32K>0</Merge32K>
@@ -470,9 +470,9 @@
               <FilePath>.\BSP\bsp_usart.c</FilePath>
             </File>
             <File>
-              <FileName>bsp_rcc.c</FileName>
+              <FileName>bsp_led.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\BSP\bsp_rcc.c</FilePath>
+              <FilePath>.\BSP\bsp_led.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -480,9 +480,9 @@
           <GroupName>LIB</GroupName>
           <Files>
             <File>
-              <FileName>pid_lib.c</FileName>
+              <FileName>vofa_lib.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\LIB\pid_lib.c</FilePath>
+              <FilePath>.\LIB\vofa_lib.c</FilePath>
             </File>
           </Files>
         </Group>

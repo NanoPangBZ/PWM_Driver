@@ -32,3 +32,5 @@
 .\objects\main.o: .\BSP\bsp_tim.h
 .\objects\main.o: .\BSP\bsp_usart.h
 .\objects\main.o: .\LIB\pid_lib.h
+.\objects\main.o: .\BSP\bsp_led.h
+.\objects\main.o: .\LIB\vofa_lib.h

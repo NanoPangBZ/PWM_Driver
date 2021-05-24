@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "stm32f10x.h": "c",
-        "bsp_rcc.h": "c"
+        "bsp_rcc.h": "c",
+        "sbuffer_lib.h": "c",
+        "vofa_p.h": "c",
+        "vofa_lib.h": "c",
+        "bsp_led.h": "c",
+        "bsp_usart.h": "c"
     }
 }

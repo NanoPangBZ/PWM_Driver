@@ -29,3 +29,4 @@
 .\objects\bsp_tim.o: .\FWLIB\inc\stm32f10x_usart.h
 .\objects\bsp_tim.o: .\FWLIB\inc\stm32f10x_wwdg.h
 .\objects\bsp_tim.o: .\FWLIB\inc\misc.h
+.\objects\bsp_tim.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h

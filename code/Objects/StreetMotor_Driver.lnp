@@ -14,8 +14,10 @@
 ".\objects\bsp_tim.o"
 ".\objects\bsp_usart.o"
 ".\objects\bsp_rcc.o"
+".\objects\bsp_led.o"
 ".\objects\pid_lib.o"
---library_type=microlib --nodebug --strict --scatter ".\Objects\StreetMotor_Driver.sct"
+".\objects\vofa_lib.o"
+--library_type=microlib --strict --scatter ".\Objects\StreetMotor_Driver.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list ".\Listings\StreetMotor_Driver.map" -o .\Objects\StreetMotor_Driver.axf

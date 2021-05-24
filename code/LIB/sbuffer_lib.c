@@ -2,5 +2,5 @@
 
 void Creat_Sbuffer(void*ptr,int size)
 {
-
+    
 }
