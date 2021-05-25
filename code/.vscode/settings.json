@@ -6,6 +6,7 @@
         "vofa_p.h": "c",
         "vofa_lib.h": "c",
         "bsp_led.h": "c",
-        "bsp_usart.h": "c"
+        "bsp_usart.h": "c",
+        "cstdio": "cpp"
     }
 }

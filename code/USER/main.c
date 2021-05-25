@@ -15,12 +15,18 @@ int main(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
+	Usart_Init();
 	PWM_Init();
 	LED_Init();
 
 	LED_Test();
 	for(uint8_t temp=0;temp<16;temp++)
-		PWM_Out(temp,10000);
-	while(1);
+		PWM_Out(temp,2400);
+	while(1)
+	{
+		uint8_t temp;
+		temp = *Read_Usart_Sbuffer(1);
+		printf("Sbuffer_Len:%d\r\n",temp);
+	}
 }
 

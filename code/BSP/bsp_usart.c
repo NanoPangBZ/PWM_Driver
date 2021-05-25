@@ -6,6 +6,7 @@ void Usart_Init(void)
     Usart_GPIO_Config();
     Usart_Config();
     Usart_NVIC_Config();
+    Usart_DMA_Config();
 }
 
 void Usart_Config(void)
@@ -87,10 +88,79 @@ void Usart_GPIO_Config(void)
     GPIO_Init(GPIOC,&GPIO_InitStruct);
 }
 
+void Usart_DMA_Config(void)
+{
+    
+}
+
+void Usart_Rx_Input(uint8_t USARTx,uint8_t dat)
+{
+    //判断缓存区是否满载
+    if(Usart_RX_Sbuffer[USARTx-1][0] < USART_RX_SBUFFER_SIZE-1)
+    {
+        Usart_RX_Sbuffer[USARTx-1][Usart_RX_Sbuffer[USARTx-1][0]] = dat;
+        Usart_RX_Sbuffer[USARTx-1][0]++;
+        return;
+    }
+    Usart_RX_Sbuffer[USARTx-1][0] = USART_RX_SBUFFER_SIZE;
+}
+
+uint8_t*Read_Usart_Sbuffer(uint8_t USARTx)
+{
+    return Usart_RX_Sbuffer[USARTx-1];
+}
+
 int fputc (int c, FILE *fp)
 {
 	USART_SendData(USART1,c);
 	while(USART_GetFlagStatus(USART1,USART_FLAG_TXE) == RESET);
 	return c;
+}
+
+/*************中断****************/
+
+void USART1_IRQHandler(void)
+{
+    if(USART_GetITStatus(USART1,USART_IT_RXNE) == SET)
+    {
+        Usart_Rx_Input(1,(uint8_t)USART_ReceiveData(USART1));
+        USART_ClearITPendingBit(USART1,USART_IT_RXNE);
+    }
+}
+
+void USART2_IRQHandler(void)
+{
+    if(USART_GetITStatus(USART2,USART_IT_RXNE) == SET)
+    {
+        Usart_Rx_Input(2,(uint8_t)USART_ReceiveData(USART2));
+        USART_ClearITPendingBit(USART2,USART_IT_RXNE);
+    }
+}
+
+void USART3_IRQHandler(void)
+{
+    if(USART_GetITStatus(USART3,USART_IT_RXNE) == SET)
+    {
+        Usart_Rx_Input(3,(uint8_t)USART_ReceiveData(USART3));
+        USART_ClearITPendingBit(USART3,USART_IT_RXNE);
+    }
+}
+
+void UART4_IRQHandler(void)
+{
+    if(USART_GetITStatus(UART4,USART_IT_RXNE) == SET)
+    {
+        Usart_Rx_Input(4,(uint8_t)USART_ReceiveData(UART4));
+        USART_ClearITPendingBit(UART4,USART_IT_RXNE);
+    }
+}
+
+void UART5_IRQHandler(void)
+{
+    if(USART_GetITStatus(UART5,USART_IT_RXNE) == SET)
+    {
+        Usart_Rx_Input(5,(uint8_t)USART_ReceiveData(UART5));
+        USART_ClearITPendingBit(UART5,USART_IT_RXNE);
+    }
 }
 
