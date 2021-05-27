@@ -7,6 +7,7 @@ void Usart_Init(void)
     Usart_Config();
     Usart_NVIC_Config();
     Usart_DMA_Config();
+    Usart_Enable();
 }
 
 void Usart_Config(void)
@@ -18,7 +19,7 @@ void Usart_Config(void)
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB1Periph_UART5,ENABLE);
 
-    USART_InitStruct.USART_BaudRate = 115200;
+    USART_InitStruct.USART_BaudRate = 115200 ;
     USART_InitStruct.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
     USART_InitStruct.USART_Mode = USART_Mode_Rx | USART_Mode_Tx;
     USART_InitStruct.USART_Parity = USART_Parity_No;
@@ -26,7 +27,10 @@ void Usart_Config(void)
     USART_InitStruct.USART_WordLength = USART_WordLength_8b;
 
     for(uint8_t temp=0;temp<5;temp++)
+    {
         USART_Init(Target_Usart[temp],&USART_InitStruct);
+        USART_ClearFlag(Target_Usart[temp],USART_FLAG_RXNE);
+    }
 }
 
 void Usart_NVIC_Config(void)
@@ -90,7 +94,66 @@ void Usart_GPIO_Config(void)
 
 void Usart_DMA_Config(void)
 {
-    
+    DMA_InitTypeDef DMA_InitStruct;
+    NVIC_InitTypeDef    NVIC_InitStruct;
+
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,ENABLE);
+    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2,ENABLE);
+
+    DMA_InitStruct.DMA_BufferSize = 0;
+    DMA_InitStruct.DMA_DIR = DMA_DIR_PeripheralDST;
+    DMA_InitStruct.DMA_M2M = DMA_M2M_Disable;
+    DMA_InitStruct.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+    DMA_InitStruct.DMA_MemoryInc = DMA_MemoryInc_Enable;
+    DMA_InitStruct.DMA_Mode = DMA_Mode_Normal;
+    DMA_InitStruct.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+    DMA_InitStruct.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+    DMA_InitStruct.DMA_Priority = DMA_Priority_Medium;
+
+    DMA_InitStruct.DMA_PeripheralBaseAddr = (uint32_t)&USART1->DR;
+    DMA_InitStruct.DMA_MemoryBaseAddr = (uint32_t)(&Usart_TX_Sbuffer[0][1]);
+    DMA_Init(DMA1_Channel4,&DMA_InitStruct);
+
+    DMA_ITConfig(DMA1_Channel4,DMA_IT_TC,ENABLE);
+
+    NVIC_InitStruct.NVIC_IRQChannel = DMA1_Channel4_IRQn;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 10;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+
+    NVIC_Init(&NVIC_InitStruct);
+
+    DMA_ClearFlag(DMA1_FLAG_TC4);
+
+    USART_DMACmd(USART1,USART_DMAReq_Tx,ENABLE);
+
+    Usart_TX_Sbuffer[0][0] = 0;
+}
+
+void Usart_Enable(void)
+{
+    for(uint8_t temp=0;temp<5;temp++)
+        USART_Cmd(Target_Usart[temp],ENABLE);
+}
+
+uint8_t Usart_Sned(uint8_t USARTx,uint8_t*dat,uint8_t len)
+{
+    if(Usart_TX_Sbuffer[USARTx-1][0] == 0 && len<USART_TX_SBUFFER_SIZE-1)
+    {
+        uint8_t temp;
+        Usart_TX_Sbuffer[USARTx-1][0] = len;
+        for(temp=0;temp<len;temp++)
+            Usart_TX_Sbuffer[USARTx-1][temp+1] = *(dat+temp);
+        Usart_Channel[USARTx-1]->CNDTR = len;
+        Usart_Channel[USARTx-1]->CCR |= DMA_CCR1_EN;
+        return 0;
+    }
+    return 1;
+}
+
+void Usart_Tx_Clear(uint8_t USARTx)
+{
+    Usart_TX_Sbuffer[USARTx-1][0] = 0;
 }
 
 void Usart_Rx_Input(uint8_t USARTx,uint8_t dat)
@@ -98,7 +161,7 @@ void Usart_Rx_Input(uint8_t USARTx,uint8_t dat)
     //判断缓存区是否满载
     if(Usart_RX_Sbuffer[USARTx-1][0] < USART_RX_SBUFFER_SIZE-1)
     {
-        Usart_RX_Sbuffer[USARTx-1][Usart_RX_Sbuffer[USARTx-1][0]] = dat;
+        Usart_RX_Sbuffer[USARTx-1][Usart_RX_Sbuffer[USARTx-1][0] + 1] = dat;
         Usart_RX_Sbuffer[USARTx-1][0]++;
         return;
     }
@@ -164,3 +227,11 @@ void UART5_IRQHandler(void)
     }
 }
 
+void DMA1_Channel4_IRQHandler(void)
+{
+    if(DMA_GetITStatus(DMA1_IT_TC4) == SET)
+    {
+        Usart_Tx_Clear(1);
+        DMA_ClearITPendingBit(DMA1_IT_TC4);
+    }
+}

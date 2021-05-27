@@ -30,3 +30,4 @@
 .\output\bsp_usart.o: .\FWLIB\inc\stm32f10x_usart.h
 .\output\bsp_usart.o: .\FWLIB\inc\stm32f10x_wwdg.h
 .\output\bsp_usart.o: .\FWLIB\inc\misc.h
+.\output\bsp_usart.o: BSP\bsp_led.h

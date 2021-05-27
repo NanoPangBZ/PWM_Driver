@@ -2,6 +2,7 @@
 #define _BSP_USART_H_
 
 #include "stm32f10x.h"
+#include "bsp_led.h"
 
 #define USART_RX_SBUFFER_SIZE   64
 #define USART_TX_SBUFFER_SIZE   64
@@ -11,17 +12,26 @@ static uint8_t Usart_RX_Sbuffer[5][USART_RX_SBUFFER_SIZE];
 static uint8_t Usart_TX_Sbuffer[5][USART_TX_SBUFFER_SIZE];
 
 static USART_TypeDef*Target_Usart[5] = {USART1,USART2,USART3,UART4,UART5};
+static DMA_Channel_TypeDef*Usart_Channel[5] = {DMA1_Channel4};
 
 void Usart_Init(void);
 void Usart_Config(void);
 void Usart_NVIC_Config(void);
 void Usart_GPIO_Config(void);
 void Usart_DMA_Config(void);
+void Usart_Enable(void);
 
-void Usart_Rx_Input(uint8_t USARTx,uint8_t dat);
 uint8_t*Read_Usart_Sbuffer(uint8_t USARTx);
+uint8_t Usart_Sned(uint8_t USARTx,uint8_t*dat,uint8_t len);
+
+void Usart_Tx_Clear(uint8_t USARTx);
+void Usart_Rx_Input(uint8_t USARTx,uint8_t dat);
 
 /*************中断****************/
 void USART1_IRQHandler(void);
+void USART2_IRQHandler(void);
+void USART3_IRQHandler(void);
+void UART4_IRQHandler(void);
+void UART5_IRQHandler(void);
 
 #endif
