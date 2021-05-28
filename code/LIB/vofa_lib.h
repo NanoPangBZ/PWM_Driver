@@ -6,7 +6,7 @@
  *     2021/5/14 庞碧璋
 *************************/
 
-#define Vofa_Channel_Num    10  //帧通道数
+#define Vofa_Channel_Num    1  //帧通道数
 
 typedef struct
 {
@@ -17,5 +17,6 @@ typedef struct
 static Vofa_Fram Vofa_Sbuffer = {{0},{0x00,0x00,0x80,0x7f}};
 
 void Vofa_Input(float data,unsigned char Channel);
+unsigned char*Vofa_Return(void);
 
 #endif

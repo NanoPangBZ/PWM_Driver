@@ -232,6 +232,7 @@ void DMA1_Channel4_IRQHandler(void)
     if(DMA_GetITStatus(DMA1_IT_TC4) == SET)
     {
         Usart_Tx_Clear(1);
+        Usart_Channel[0]->CCR &= (uint16_t)(~DMA_CCR1_EN);
         DMA_ClearITPendingBit(DMA1_IT_TC4);
     }
 }
