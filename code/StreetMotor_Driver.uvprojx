@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F10X_HD</Define>
               <Undefine></Undefine>
-              <IncludePath>.\CMSIS;.\FWLIB\inc;.\FWLIB\src;.\USER;.\BSP;.\LIB</IncludePath>
+              <IncludePath>.\CMSIS;.\FWLIB\inc;.\FWLIB\src;.\USER;.\BSP;.\LIB;.\DRIVER</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -483,6 +483,16 @@
               <FileName>vofa_lib.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\LIB\vofa_lib.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>DRIVER</GroupName>
+          <Files>
+            <File>
+              <FileName>StreetMotor_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\DRIVER\StreetMotor_driver.c</FilePath>
             </File>
           </Files>
         </Group>

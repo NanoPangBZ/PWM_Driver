@@ -22,7 +22,7 @@ void Usart_DMA_Config(void);
 void Usart_Enable(void);
 
 uint8_t*Read_Usart_Sbuffer(uint8_t USARTx);
-uint8_t Usart_Sned(uint8_t USARTx,uint8_t*dat,uint8_t len);
+uint8_t Usart_Send(uint8_t USARTx,uint8_t*dat,uint8_t len);
 
 void Usart_Tx_Clear(uint8_t USARTx);
 void Usart_Rx_Input(uint8_t USARTx,uint8_t dat);

@@ -136,7 +136,7 @@ void Usart_Enable(void)
         USART_Cmd(Target_Usart[temp],ENABLE);
 }
 
-uint8_t Usart_Sned(uint8_t USARTx,uint8_t*dat,uint8_t len)
+uint8_t Usart_Send(uint8_t USARTx,uint8_t*dat,uint8_t len)
 {
     if(Usart_TX_Sbuffer[USARTx-1][0] == 0 && len<USART_TX_SBUFFER_SIZE-1)
     {

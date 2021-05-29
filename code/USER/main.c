@@ -4,6 +4,9 @@
 #include "bsp_led.h"
 #include "bsp_tim.h"
 #include "bsp_usart.h"
+
+#include "StreetMotor_driver.h"
+
 #include "vofa_lib.h"
 
 void delay_us(uint16_t us)
@@ -23,6 +26,7 @@ int main(void)
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
 	LED_Init();
+	PWM_Init();
 	Usart_Init();
 
 	LED_CTR(2,1);
@@ -31,11 +35,5 @@ int main(void)
 
 	while(1)
 	{
-		Usart_Sned(1,Vofa_Return(),sizeof(Vofa_Fram));
-		delay_us(1000);
-		delay_us(1000);
-		delay_us(1000);
-		delay_us(1000);
-		delay_us(1000);
 	}
 }

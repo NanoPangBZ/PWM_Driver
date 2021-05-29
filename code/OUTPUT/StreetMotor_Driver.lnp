@@ -15,6 +15,7 @@
 ".\output\bsp_usart.o"
 ".\output\bsp_led.o"
 ".\output\vofa_lib.o"
+".\output\streetmotor_driver.o"
 --library_type=microlib --strict --scatter ".\OUTPUT\StreetMotor_Driver.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers

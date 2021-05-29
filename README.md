@@ -50,3 +50,43 @@
 ​	——已经查清楚了，是vofa+本身的优化导致字符的显示比较慢(大概)，波形图的控制完全OK。使用utf-8只会导致正点原子的串口助手汉字乱码，vofa+支持utf-8的字符编码。
 
 ​	**2021/5/28**
+
+## DRIVER
+
+### 1.舵机驱动
+
+```c
+#ifndef _STREET_MOTOR_DRIVER_H_
+#define _STREET_MOTOR_DRIVER_H_
+
+/*********************************************************
+ * PWM输出接口 PWM_Out_Port(Channel,Width)
+ * Channel: 通道标号        unsigned char
+ * Width:   脉宽(单位us)    unsigned short int
+ * 无返回值
+ * 接口要求:能在规定通道输出50Hz的PWM波,脉宽参数Width
+ *      2021/5/28   庞碧璋
+*********************************************************/
+
+#define STREET_MOTOR_NUM    16
+#define PWM_Out_Port(Channel,Width)     PWM_Out(Channel,Width)
+
+extern void PWM_Out_Port(unsigned char Channel,unsigned short int Width);
+
+void StreetMotor_CTR(unsigned char num,double angle);
+unsigned int AngleToWidth(double angle);
+
+#endif
+```
+
+​	**2021/5/30**
+
+## LIB
+
+### 1.vofa+上位机
+
+​	**通道0输出恒定值测试通过**
+
+​	**2021/5/30**
+
+​	
