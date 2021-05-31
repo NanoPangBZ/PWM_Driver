@@ -14,6 +14,7 @@
 ".\output\bsp_tim.o"
 ".\output\bsp_usart.o"
 ".\output\bsp_led.o"
+".\output\bsp_key.o"
 ".\output\vofa_lib.o"
 ".\output\streetmotor_driver.o"
 --library_type=microlib --strict --scatter ".\OUTPUT\StreetMotor_Driver.sct"

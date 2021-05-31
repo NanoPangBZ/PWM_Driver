@@ -142,6 +142,9 @@ Section Cross References
     bsp_led.o(i.LED_CTR) refers to bsp_led.o(.data) for LED_GPIO
     bsp_led.o(i.LED_Init) refers to stm32f10x_rcc.o(i.RCC_APB2PeriphClockCmd) for RCC_APB2PeriphClockCmd
     bsp_led.o(i.LED_Init) refers to stm32f10x_gpio.o(i.GPIO_Init) for GPIO_Init
+    bsp_key.o(i.Key_Init) refers to stm32f10x_rcc.o(i.RCC_APB2PeriphClockCmd) for RCC_APB2PeriphClockCmd
+    bsp_key.o(i.Key_Init) refers to stm32f10x_gpio.o(i.GPIO_Init) for GPIO_Init
+    bsp_key.o(i.Key_Init) refers to bsp_key.o(.data) for KEY_Pin
     vofa_lib.o(i.Vofa_Input) refers to vofa_lib.o(.data) for Vofa_Sbuffer
     vofa_lib.o(i.Vofa_Return) refers to vofa_lib.o(.data) for Vofa_Sbuffer
     vofa_lib.o(i.Vofa_Send) refers to bsp_usart.o(i.Usart_Send) for Usart_Send
@@ -355,6 +358,9 @@ Removing Unused input sections from the image.
     Removing bsp_usart.o(i.Read_Usart_Sbuffer), (16 bytes).
     Removing bsp_usart.o(i.Usart_Send), (104 bytes).
     Removing bsp_usart.o(i.fputc), (36 bytes).
+    Removing bsp_key.o(i.Key_Init), (88 bytes).
+    Removing bsp_key.o(i.Read_Key), (6 bytes).
+    Removing bsp_key.o(.data), (20 bytes).
     Removing vofa_lib.o(i.Vofa_Return), (8 bytes).
     Removing vofa_lib.o(i.Vofa_Send), (24 bytes).
     Removing vofa_lib.o(.bss), (640 bytes).
@@ -366,7 +372,7 @@ Removing Unused input sections from the image.
     Removing cdrcmple.o(.text), (48 bytes).
     Removing depilogue.o(.text), (186 bytes).
 
-184 unused section(s) (total 8638 bytes) removed from the image.
+187 unused section(s) (total 8752 bytes) removed from the image.
 
 ==============================================================================
 
@@ -376,25 +382,26 @@ Image Symbol Table
 
     Symbol Name                              Value     Ov Type        Size  Object(Section)
 
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry5.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry2.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry10b.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry11b.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry2.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry9a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry.o ABSOLUTE
-    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry8a.o ABSOLUTE
     ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7b.o ABSOLUTE
+    ../clib/microlib/init/entry.s            0x00000000   Number         0  entry7a.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llushr.o ABSOLUTE
     ../clib/microlib/longlong.c              0x00000000   Number         0  llshl.o ABSOLUTE
     ../clib/microlib/stubs.s                 0x00000000   Number         0  iusefp.o ABSOLUTE
     ../fplib/microlib/fpepilogue.c           0x00000000   Number         0  depilogue.o ABSOLUTE
     ../fplib/microlib/fpfix.c                0x00000000   Number         0  dfixi.o ABSOLUTE
     ../fplib/microlib/fpmul.c                0x00000000   Number         0  dmul.o ABSOLUTE
+    BSP\bsp_key.c                            0x00000000   Number         0  bsp_key.o ABSOLUTE
     BSP\bsp_led.c                            0x00000000   Number         0  bsp_led.o ABSOLUTE
     BSP\bsp_tim.c                            0x00000000   Number         0  bsp_tim.o ABSOLUTE
     BSP\bsp_usart.c                          0x00000000   Number         0  bsp_usart.o ABSOLUTE
@@ -695,17 +702,17 @@ Memory Map of the image
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x08000000   0x00000130   Data   RO          132    RESET               startup_stm32f10x_hd.o
-    0x08000130   0x00000000   Code   RO         1708  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
-    0x08000130   0x00000004   Code   RO         1719    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
-    0x08000134   0x00000004   Code   RO         1722    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
-    0x08000138   0x00000000   Code   RO         1724    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
-    0x08000138   0x00000000   Code   RO         1726    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
-    0x08000138   0x00000008   Code   RO         1727    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
-    0x08000140   0x00000000   Code   RO         1729    .ARM.Collect$$$$0000000D  mc_w.l(entry10a.o)
-    0x08000140   0x00000000   Code   RO         1731    .ARM.Collect$$$$0000000F  mc_w.l(entry11a.o)
-    0x08000140   0x00000004   Code   RO         1720    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
+    0x08000130   0x00000000   Code   RO         1731  * .ARM.Collect$$$$00000000  mc_w.l(entry.o)
+    0x08000130   0x00000004   Code   RO         1742    .ARM.Collect$$$$00000001  mc_w.l(entry2.o)
+    0x08000134   0x00000004   Code   RO         1745    .ARM.Collect$$$$00000004  mc_w.l(entry5.o)
+    0x08000138   0x00000000   Code   RO         1747    .ARM.Collect$$$$00000008  mc_w.l(entry7b.o)
+    0x08000138   0x00000000   Code   RO         1749    .ARM.Collect$$$$0000000A  mc_w.l(entry8b.o)
+    0x08000138   0x00000008   Code   RO         1750    .ARM.Collect$$$$0000000B  mc_w.l(entry9a.o)
+    0x08000140   0x00000000   Code   RO         1752    .ARM.Collect$$$$0000000D  mc_w.l(entry10a.o)
+    0x08000140   0x00000000   Code   RO         1754    .ARM.Collect$$$$0000000F  mc_w.l(entry11a.o)
+    0x08000140   0x00000004   Code   RO         1743    .ARM.Collect$$$$00002712  mc_w.l(entry2.o)
     0x08000144   0x00000024   Code   RO          133    .text               startup_stm32f10x_hd.o
-    0x08000168   0x00000024   Code   RO         1738    .text               mc_w.l(init.o)
+    0x08000168   0x00000024   Code   RO         1761    .text               mc_w.l(init.o)
     0x0800018c   0x00000004   Code   RO         1404    i.BusFault_Handler  stm32f10x_it.o
     0x08000190   0x00000034   Code   RO         1520    i.DMA1_Channel4_IRQHandler  bsp_usart.o
     0x080001c4   0x0000001c   Code   RO          196    i.DMA_ClearFlag     stm32f10x_dma.o
@@ -782,13 +789,13 @@ Memory Map of the image
     0x080011c8   0x00000074   Code   RO         1532    i.Usart_NVIC_Config  bsp_usart.o
     0x0800123c   0x00000050   Code   RO         1533    i.Usart_Rx_Input    bsp_usart.o
     0x0800128c   0x00000014   Code   RO         1535    i.Usart_Tx_Clear    bsp_usart.o
-    0x080012a0   0x00000010   Code   RO         1657    i.Vofa_Input        vofa_lib.o
-    0x080012b0   0x0000000e   Code   RO         1744    i.__scatterload_copy  mc_w.l(handlers.o)
-    0x080012be   0x00000002   Code   RO         1745    i.__scatterload_null  mc_w.l(handlers.o)
-    0x080012c0   0x0000000e   Code   RO         1746    i.__scatterload_zeroinit  mc_w.l(handlers.o)
+    0x080012a0   0x00000010   Code   RO         1680    i.Vofa_Input        vofa_lib.o
+    0x080012b0   0x0000000e   Code   RO         1767    i.__scatterload_copy  mc_w.l(handlers.o)
+    0x080012be   0x00000002   Code   RO         1768    i.__scatterload_null  mc_w.l(handlers.o)
+    0x080012c0   0x0000000e   Code   RO         1769    i.__scatterload_zeroinit  mc_w.l(handlers.o)
     0x080012ce   0x00000002   PAD
     0x080012d0   0x0000002c   Code   RO         1365    i.main              main.o
-    0x080012fc   0x00000020   Data   RO         1742    Region$$Table       anon$$obj.o
+    0x080012fc   0x00000020   Data   RO         1765    Region$$Table       anon$$obj.o
 
 
     Execution Region RW_IRAM1 (Base: 0x20000000, Size: 0x000007a0, Max: 0x00010000, ABSOLUTE)
@@ -799,7 +806,7 @@ Memory Map of the image
     0x20000014   0x00000050   Data   RW         1474    .data               bsp_tim.o
     0x20000064   0x0000003c   Data   RW         1538    .data               bsp_usart.o
     0x200000a0   0x00000014   Data   RW         1639    .data               bsp_led.o
-    0x200000b4   0x00000068   Data   RW         1661    .data               vofa_lib.o
+    0x200000b4   0x00000068   Data   RW         1684    .data               vofa_lib.o
     0x2000011c   0x00000280   Zero   RW         1537    .bss                bsp_usart.o
     0x2000039c   0x00000004   PAD
     0x200003a0   0x00000400   Zero   RW          130    STACK               startup_stm32f10x_hd.o

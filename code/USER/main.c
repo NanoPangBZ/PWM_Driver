@@ -4,6 +4,7 @@
 #include "bsp_led.h"
 #include "bsp_tim.h"
 #include "bsp_usart.h"
+#include "bsp_key.h"
 
 #include "StreetMotor_driver.h"
 
@@ -29,11 +30,14 @@ int main(void)
 	PWM_Init();
 	Usart_Init();
 
-	LED_CTR(2,1);
-
-	Vofa_Input(12.0,0);
+	LED_CTR(1,1);
+	LED_CTR(2,0);
 
 	while(1)
 	{
+		if(Read_Key(0))
+			LED_CTR(2,1);
+		else
+			LED_CTR(2,0);
 	}
 }
