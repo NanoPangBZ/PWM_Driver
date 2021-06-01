@@ -1,5 +1,5 @@
-#ifndef _VOFA_LIB_H_
-#define _VOFA_LIB_H_
+#ifndef _VOFA_DRIVER_H_
+#define _VOFA_DRIVER_H_
 
 /****************************************************
  * vofa+上位机

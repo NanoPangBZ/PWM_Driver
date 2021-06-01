@@ -2,7 +2,13 @@
 #define _BSP_USART_H_
 
 #include "stm32f10x.h"
-#include "bsp_led.h"
+
+/******************************************
+ * 适用stm32f103vet6
+ * 串口2的GPIO进行了重映射!
+ * 发送函数使用的DMA通道
+ *      2021/5/22   庞碧璋
+******************************************/
 
 #define USART_RX_SBUFFER_SIZE   64
 #define USART_TX_SBUFFER_SIZE   64
@@ -12,7 +18,7 @@ static uint8_t Usart_RX_Sbuffer[5][USART_RX_SBUFFER_SIZE];
 static uint8_t Usart_TX_Sbuffer[5][USART_TX_SBUFFER_SIZE];
 
 static USART_TypeDef*Target_Usart[5] = {USART1,USART2,USART3,UART4,UART5};
-static DMA_Channel_TypeDef*Usart_Channel[5] = {DMA1_Channel4};
+static DMA_Channel_TypeDef*Usart_Channel[5] = {DMA1_Channel4,DMA1_Channel7,};
 
 void Usart_Init(void);
 void Usart_Config(void);

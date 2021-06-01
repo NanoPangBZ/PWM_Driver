@@ -8,6 +8,7 @@
         "bsp_led.h": "c",
         "bsp_usart.h": "c",
         "cstdio": "cpp",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "test_app.h": "c"
     }
 }

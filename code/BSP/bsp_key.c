@@ -7,7 +7,7 @@ void Key_Init(void)
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
     RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD,ENABLE);
 
-    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+    GPIO_InitStruct.GPIO_Mode = GPIO_Mode_IPD;
 
     for(uint8_t temp=0;temp<4;temp++)
     {
@@ -21,10 +21,10 @@ uint8_t Read_Key(uint8_t Channel)
 {
     if(Channel < KEY_NUM-1)
     {
-        if(KEY_GPIO[Channel]->IDR &= KEY_Pin[Channel])
-            return 1;
-        else
+        if(KEY_GPIO[Channel]->IDR & KEY_Pin[Channel])
             return 0;
+        else
+            return 1;
     }
     return 0;
 }
