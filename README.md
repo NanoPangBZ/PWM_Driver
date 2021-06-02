@@ -16,6 +16,7 @@
 6. DC12V电源输入封装错误
 7. 定位孔位置被元器件阻挡
 8. 可适当缩小pcb尺寸
+9. GPIOB有问题，应该事MCU的硬件问题
 
 **2021/5/19 12:04 **
 
@@ -54,6 +55,21 @@
 ​	**除了串口1DMA发送，其余串口的DMA发送暂时没有写。**
 
 ​	**2021/6/1**
+
+​	**串口bsp全部完成，包括缓存区的push何clear,以及串口4,5的直接发送。**
+
+```c
+uint8_t*Read_Usart_Sbuffer(uint8_t USARTx);
+uint8_t Usart_Send(uint8_t USARTx,uint8_t*dat,uint8_t len);
+void Usart_Rx_Push(uint8_t USARTx,uint8_t len);
+void Usart_Rx_Clear(uint8_t USARTx);
+void Usart_Tx_Clear(uint8_t USARTx);
+void Usart_Rx_Input(uint8_t USARTx,uint8_t dat);
+```
+
+​	串口1发送测试完成,其余功能尚为完成测试
+
+​	**2021/6/2**
 
 ### 4.按键
 

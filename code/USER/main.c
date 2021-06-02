@@ -15,14 +15,15 @@ int main(void)
 {
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
 
+	static uint8_t Test[13] = "HelloWorld!\r\n";
+
 	LED_Init();
 	Key_Init();
 	PWM_Init();
 	Usart_Init();
 
-	PWM_Out(11,5000);
-
 	while(1)
 	{
+		Usart_Send(1,Test,13);
 	}
 }

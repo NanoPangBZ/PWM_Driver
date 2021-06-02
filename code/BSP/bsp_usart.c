@@ -114,20 +114,44 @@ void Usart_DMA_Config(void)
     DMA_InitStruct.DMA_MemoryBaseAddr = (uint32_t)(&Usart_TX_Sbuffer[0][1]);
     DMA_Init(DMA1_Channel4,&DMA_InitStruct);
 
-    DMA_ITConfig(DMA1_Channel4,DMA_IT_TC,ENABLE);
+    DMA_InitStruct.DMA_PeripheralBaseAddr = (uint32_t)&USART2->DR;
+    DMA_InitStruct.DMA_MemoryBaseAddr = (uint32_t)(&Usart_TX_Sbuffer[1][1]);
+    DMA_Init(DMA1_Channel7,&DMA_InitStruct);
+
+    DMA_InitStruct.DMA_PeripheralBaseAddr = (uint32_t)&USART3->DR;
+    DMA_InitStruct.DMA_MemoryBaseAddr = (uint32_t)(&Usart_TX_Sbuffer[2][1]);
+    DMA_Init(DMA1_Channel2,&DMA_InitStruct);
+
+    for(uint8_t temp=0;temp<3;temp++)
+        DMA_ITConfig(Usart_Channel[temp],DMA_IT_TC,ENABLE);
 
     NVIC_InitStruct.NVIC_IRQChannel = DMA1_Channel4_IRQn;
     NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 6;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStruct);
+
+    NVIC_InitStruct.NVIC_IRQChannel = DMA1_Channel7_IRQn;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
     NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 10;
     NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
+    NVIC_Init(&NVIC_InitStruct);
 
+    NVIC_InitStruct.NVIC_IRQChannel = DMA1_Channel2_IRQn;
+    NVIC_InitStruct.NVIC_IRQChannelCmd = ENABLE;
+    NVIC_InitStruct.NVIC_IRQChannelPreemptionPriority = 10;
+    NVIC_InitStruct.NVIC_IRQChannelSubPriority = 0;
     NVIC_Init(&NVIC_InitStruct);
 
     DMA_ClearFlag(DMA1_FLAG_TC4);
+    DMA_ClearFlag(DMA1_FLAG_TC7);
+    DMA_ClearFlag(DMA1_FLAG_TC2);
 
-    USART_DMACmd(USART1,USART_DMAReq_Tx,ENABLE);
-
-    Usart_TX_Sbuffer[0][0] = 0;
+    for(uint8_t temp=0;temp<3;temp++)
+    {
+        USART_DMACmd(Target_Usart[temp],USART_DMAReq_Tx,ENABLE);
+        Usart_TX_Sbuffer[temp][0] = 0;
+    }
 }
 
 void Usart_Enable(void)
@@ -138,17 +162,50 @@ void Usart_Enable(void)
 
 uint8_t Usart_Send(uint8_t USARTx,uint8_t*dat,uint8_t len)
 {
-    if(Usart_TX_Sbuffer[USARTx-1][0] == 0 && len<USART_TX_SBUFFER_SIZE-1)
+    if(USARTx<3)
+    {
+        if(Usart_TX_Sbuffer[USARTx-1][0] == 0 && len<USART_TX_SBUFFER_SIZE-1)
+        {
+            uint8_t temp;
+            Usart_TX_Sbuffer[USARTx-1][0] = len;
+            for(temp=0;temp<len;temp++)
+                Usart_TX_Sbuffer[USARTx-1][temp+1] = *(dat+temp);
+            Usart_Channel[USARTx-1]->CNDTR = len;
+            Usart_Channel[USARTx-1]->CCR |= DMA_CCR1_EN;
+            return 0;
+        }
+    }else if(USARTx<5)
     {
         uint8_t temp;
-        Usart_TX_Sbuffer[USARTx-1][0] = len;
         for(temp=0;temp<len;temp++)
-            Usart_TX_Sbuffer[USARTx-1][temp+1] = *(dat+temp);
-        Usart_Channel[USARTx-1]->CNDTR = len;
-        Usart_Channel[USARTx-1]->CCR |= DMA_CCR1_EN;
+        {
+            USART_SendData(USART1,*(dat+temp));
+	        while(USART_GetFlagStatus(Target_Usart[USARTx-1],USART_FLAG_TXE) == RESET);
+        }
         return 0;
     }
     return 1;
+}
+
+void Usart_Rx_Push(uint8_t USARTx,uint8_t len)
+{
+    if(USARTx<5)
+    {
+        if(len < Usart_RX_Sbuffer[USARTx-1][0])
+        {
+            Usart_RX_Sbuffer[USARTx-1][0] -= len;
+            for(uint8_t temp = 0;temp<Usart_RX_Sbuffer[USARTx-1][0];temp++)
+                Usart_RX_Sbuffer[USARTx-1][temp+1] = Usart_RX_Sbuffer[USARTx-1][temp+1+len];
+        }else
+        {
+            Usart_Rx_Clear(USARTx);
+        }
+    }
+}
+
+void Usart_Rx_Clear(uint8_t USARTx)
+{
+    Usart_RX_Sbuffer[USARTx-1][0] = 0;
 }
 
 void Usart_Tx_Clear(uint8_t USARTx)
@@ -234,5 +291,25 @@ void DMA1_Channel4_IRQHandler(void)
         Usart_Tx_Clear(1);
         Usart_Channel[0]->CCR &= (uint16_t)(~DMA_CCR1_EN);
         DMA_ClearITPendingBit(DMA1_IT_TC4);
+    }
+}
+
+void DMA1_Channel7_IRQHandler(void)
+{
+    if(DMA_GetITStatus(DMA1_IT_TC7) == SET)
+    {
+        Usart_Tx_Clear(2);
+        Usart_Channel[1]->CCR &= (uint16_t)(~DMA_CCR1_EN);
+        DMA_ClearITPendingBit(DMA1_IT_TC7);
+    }
+}
+
+void DMA1_Channel2_IRQHandler(void)
+{
+    if(DMA_GetITStatus(DMA1_IT_TC2) == SET)
+    {
+        Usart_Tx_Clear(3);
+        Usart_Channel[2]->CCR &= (uint16_t)(~DMA_CCR1_EN);
+        DMA_ClearITPendingBit(DMA1_IT_TC2);
     }
 }
