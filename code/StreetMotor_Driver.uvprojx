@@ -479,6 +479,11 @@
               <FileType>1</FileType>
               <FilePath>.\BSP\bsp_key.c</FilePath>
             </File>
+            <File>
+              <FileName>bsp_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\BSP\bsp_spi.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
