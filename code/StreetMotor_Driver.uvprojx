@@ -509,6 +509,11 @@
               <FileType>1</FileType>
               <FilePath>.\DRIVER\vofa_driver.c</FilePath>
             </File>
+            <File>
+              <FileName>oled12864_driver.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\DRIVER\oled12864_driver.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

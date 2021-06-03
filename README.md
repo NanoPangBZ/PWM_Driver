@@ -111,9 +111,13 @@ unsigned int AngleToWidth(double angle);
 
 ​	**2021/5/30**
 
-## LIB
+### 2.OLED12864_SPI_7Pin驱动
 
-### 1.vofa+上位机
+​	**STM32F103VET6硬件问题，无法显示，无法操控OLED12864的RES管脚。**
+
+​	**2021/6/3**
+
+### 3.vofa+上位机驱动
 
 ​	**通道0输出恒定值测试通过**
 

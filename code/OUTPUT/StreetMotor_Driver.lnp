@@ -15,9 +15,11 @@
 ".\output\bsp_usart.o"
 ".\output\bsp_led.o"
 ".\output\bsp_key.o"
+".\output\bsp_spi.o"
 ".\output\pid_lib.o"
 ".\output\streetmotor_driver.o"
 ".\output\vofa_driver.o"
+".\output\oled12864_driver.o"
 ".\output\test_app.o"
 --library_type=microlib --strict --scatter ".\OUTPUT\StreetMotor_Driver.sct"
 --summary_stderr --info summarysizes --map --xref --callgraph --symbols

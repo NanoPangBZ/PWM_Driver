@@ -33,6 +33,8 @@
 .\output\main.o: .\BSP\bsp_tim.h
 .\output\main.o: .\BSP\bsp_usart.h
 .\output\main.o: .\BSP\bsp_key.h
+.\output\main.o: .\BSP\bsp_spi.h
 .\output\main.o: .\DRIVER\StreetMotor_driver.h
+.\output\main.o: .\DRIVER\oled12864_driver.h
 .\output\main.o: .\DRIVER\vofa_driver.h
 .\output\main.o: .\APP\test_app.h
